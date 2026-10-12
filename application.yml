@@ -1,0 +1,4 @@
+micronaut:
+logger:
+    levels:
+        ERROR

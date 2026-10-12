@@ -1,0 +1,2 @@
+java -jar target/MessageServer-1.0-SNAPSHOT.jar
+

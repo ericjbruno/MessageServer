@@ -1,0 +1,4 @@
+endpoints:
+    loggers:
+        enabled: false
+        sensitive: false
