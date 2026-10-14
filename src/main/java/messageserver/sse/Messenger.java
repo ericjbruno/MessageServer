@@ -65,7 +65,9 @@ public class Messenger {
                 } else if (line.contains("data:")) {
                     int start = line.indexOf("data:") + "data:".length();
                     data = line.substring(start).trim();
-                    dest.addMessage(data);
+                    if (!dest.addMessage(data)) {
+                        return HttpResponse.serverError("Failed to store message for " + dest.getName());
+                    }
                 }
             }
 

@@ -1,7 +1,8 @@
 package messageserver.sse;
 
 import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicLong;
 import messageserver.persist.MessagePersistance;
 import messageserver.persist.MessagePersistanceFactory;
 
@@ -10,13 +11,21 @@ import messageserver.persist.MessagePersistanceFactory;
  */
 public class Queue extends Destination {
 
-    final protected ArrayBlockingQueue<Long> messageIds
-            = new ArrayBlockingQueue<>(20000);
+    // Unbounded, since every persisted message must have its ID queued for
+    // delivery. A fixed capacity rejected IDs once full (stranding messages
+    // that were already persisted) and failed to reload a large backlog
+    final protected LinkedBlockingQueue<Long> messageIds
+            = new LinkedBlockingQueue<>();
 
     final protected MessagePersistance persistance
             = MessagePersistanceFactory
                     .getInstance()
                     .getMessagePersistance();
+
+    // Last message ID issued for this queue. IDs must be unique per queue
+    // since they're the persistence key, so never reuse one even when
+    // several messages arrive within the same millisecond
+    final protected AtomicLong lastMessageId = new AtomicLong(0);
 
     public Queue(String name) {
         super(name);
@@ -25,6 +34,9 @@ public class Queue extends Destination {
         ArrayList<Long> ids = persistance.getMessageIds(name);
         if (ids != null) {
             messageIds.addAll(ids);
+            for (Long id : ids) {
+                lastMessageId.accumulateAndGet(id, Math::max);
+            }
         }
 
     }
@@ -39,7 +51,7 @@ public class Queue extends Destination {
     }
 
     public boolean addMessage(String message) {
-        Long messageId = System.currentTimeMillis();
+        Long messageId = nextMessageId();
 
         try {
             // Persist the message body then save just the message id to the queue
@@ -54,6 +66,12 @@ public class Queue extends Destination {
         }
 
         return false;
+    }
+
+    protected long nextMessageId() {
+        // Use the current time, or last ID + 1 if the clock hasn't advanced
+        return lastMessageId.updateAndGet(
+                last -> Math.max(last + 1, System.currentTimeMillis()));
     }
 
     public void deleteMessage(Long messageId) {
