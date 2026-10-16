@@ -18,14 +18,14 @@ import oracle.kv.ValueVersion;
  */
 public class MessageNoSQL implements MessagePersistance {
 
-    private final int NUM_ROWS_IN_MESSAGE_TABLE = 1000;
+    //private final int NUM_ROWS_IN_MESSAGE_TABLE = 1000;
 
     // message table 
     private String storeName = "kvstore";
     private String host = "127.0.0.1";
     private String port = "5001";
     private KVStore store = null;
-    private int num = 0;
+    //private int num = 0;
 
     private static MessageNoSQL INSTANCE = new MessageNoSQL();
 
@@ -36,7 +36,7 @@ public class MessageNoSQL implements MessagePersistance {
     ///////////////////////////////////////////////////////////////////////////
     // For testing 
     public static void main(String[] args) {
-        MessageNoSQL nosql = MessageNoSQL.getInstance();
+        MessageNoSQL.getInstance();
     }
 
     private MessageNoSQL() {
@@ -113,13 +113,15 @@ public class MessageNoSQL implements MessagePersistance {
             e.printStackTrace();
         }
 
-        for (Map.Entry<Key, ValueVersion> entry : myRecords.entrySet()) {
-            String destName = entry.getKey().getMajorPath().get(0);
-            assert (destName.equals(destinationName));
-            String messageId = entry.getKey().getMinorPath().get(0);
-            messageIds.add(Long.valueOf(messageId));
+        if ( myRecords != null ) {
+            for (Map.Entry<Key, ValueVersion> entry : myRecords.entrySet()) {
+                String destName = entry.getKey().getMajorPath().get(0);
+                assert (destName.equals(destinationName));
+                String messageId = entry.getKey().getMinorPath().get(0);
+                messageIds.add(Long.valueOf(messageId));
+            }
         }
-
+        
         return messageIds;
     }
 
