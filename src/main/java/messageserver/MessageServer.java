@@ -10,8 +10,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author ericjbruno
@@ -37,7 +35,7 @@ public class MessageServer {
     static String os = "";
 
     String webappDirLocation = "src/webapp/";
-    private Logger logger = LoggerFactory.getLogger(MessageServer.class);
+    //private Logger logger = LoggerFactory.getLogger(MessageServer.class);
 
     /////////////////////////////////////////////////////////////////////
     public static void main(String[] args) throws Exception {

@@ -51,7 +51,7 @@ public class Messenger {
         }
     }
 
-    public HttpResponse processSend(Destination dest, String data) {
+    public HttpResponse<String> processSend(Destination dest, String data) {
         boolean event = false;
         String id = "";
 

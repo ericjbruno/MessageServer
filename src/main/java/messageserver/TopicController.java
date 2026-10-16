@@ -1,6 +1,5 @@
 package messageserver;
 
-import messageserver.sse.Destination;
 import messageserver.sse.Messenger;
 import io.micronaut.http.HttpParameters;
 import io.micronaut.http.HttpRequest;
@@ -53,7 +52,7 @@ public class TopicController extends Messenger {
     //
     @Consumes(MediaType.TEXT_EVENT_STREAM)
     @Post("/topic/publish")
-    public HttpResponse topic(Session session,
+    public HttpResponse<?> topic(Session session,
             HttpRequest<?> request,
             @Body String data) {
         try {

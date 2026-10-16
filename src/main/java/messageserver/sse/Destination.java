@@ -1,7 +1,6 @@
 package messageserver.sse;
 
 import java.util.Vector;
-import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * @author ericjbruno

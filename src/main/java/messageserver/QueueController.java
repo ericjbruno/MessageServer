@@ -71,7 +71,7 @@ public class QueueController extends Messenger {
     //
     @Consumes(MediaType.TEXT_EVENT_STREAM)
     @Post("/queue/publish")
-    public HttpResponse queue(Session session,
+    public HttpResponse<?> queue(Session session,
             HttpRequest<?> request,
             @Body String data) {
         try {
@@ -91,7 +91,7 @@ public class QueueController extends Messenger {
         ArrayList<String> queueNames = messageDB.getStoredDestinations();
         for (String queueName : queueNames) {
             // Get the queue (loads all queued messages as side effect)
-            Queue dest = getQueue(queueName);
+            getQueue(queueName);
         }
     }
 
