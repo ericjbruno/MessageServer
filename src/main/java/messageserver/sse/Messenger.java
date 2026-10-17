@@ -52,17 +52,18 @@ public class Messenger {
     }
 
     public HttpResponse<String> processSend(Destination dest, String data) {
-        boolean event = false;
-        String id = "";
+        // boolean event = false;
+        // String id = "";
 
         try {
             String[] lines = data.split(System.getProperty("line.separator"));
             for (String line : lines) {
-                if (line.contains("event:")) {
-                    event = true;
-                } else if (line.contains("id:")) {
-                    id = line;
-                } else if (line.contains("data:")) {
+                // if (line.contains("event:")) {
+                //     event = true;
+                // } else if (line.contains("id:")) {
+                //     id = line;
+                // }
+                if (line.contains("data:")) {
                     int start = line.indexOf("data:") + "data:".length();
                     data = line.substring(start).trim();
                     if (!dest.addMessage(data)) {
@@ -70,9 +71,9 @@ public class Messenger {
                     }
                 }
             }
-
             return HttpResponse.ok(dest.getName()).setAttribute("Access-Control-Allow-Origin", "*");
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             return HttpResponse.serverError(e.toString());
         }
 
