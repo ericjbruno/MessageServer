@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import messageserver.persist.MessagePersistanceFactory;
 
 /**
  * @author ericjbruno
@@ -40,6 +41,11 @@ public class MessageServer {
     /////////////////////////////////////////////////////////////////////
     public static void main(String[] args) throws Exception {
         //MessageServer server = new MessageServer();
+
+        // Initialize the message store before starting, so a bad persistence
+        // setting or unreachable database fails now, not on the first request
+        MessagePersistanceFactory.getInstance();
+
         Micronaut.run(MessageServer.class);
     }
 

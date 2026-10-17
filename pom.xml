@@ -48,6 +48,14 @@
             <artifactId>kvclient</artifactId>
             <version>25.3.21</version>
         </dependency>
+        <!-- NoHeapDB, the alternative message store. Not on Maven Central;
+             install it into the local repo by running mvn install in the
+             NoHeapDB project -->
+        <dependency>
+            <groupId>com.alluretechnology</groupId>
+            <artifactId>NoHeapDB</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!-- Runtime dependencies of kvclient (from its embedded POM) -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
