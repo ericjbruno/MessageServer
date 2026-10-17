@@ -12,39 +12,15 @@
   <version>1.0-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.7.0</version>
-          <executions>
-            <execution>
-              <id>test-compile</id>
-              <goals>
-                <goal>testCompile</goal>
-              </goals>
-              <configuration>
-                <compilerArgs>
-                  <arg>-parameters</arg>
-                </compilerArgs>
-              </configuration>
-            </execution>
-          </executions>
-          <configuration>
-            <source>${jdk.version}</source>
-            <target>${jdk.version}</target>
-            <encoding>UTF-8</encoding>
-            <compilerArgs>
-              <arg>-parameters</arg>
-            </compilerArgs>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
       <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <forceCreation>true</forceCreation>
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.0</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -52,11 +28,36 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>module-info.class</exclude>
+                    <exclude>META-INF/versions/*/module-info.class</exclude>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                    <exclude>META-INF/MANIFEST.MF</exclude>
+                    <exclude>META-INF/maven/**</exclude>
+                    <exclude>META-INF/config-properties.adoc</exclude>
+                    <exclude>META-INF/spring-configuration-metadata.json</exclude>
+                    <exclude>META-INF/ASL2.0</exclude>
+                    <exclude>META-INF/FastDoubleParser-LICENSE</exclude>
+                  </excludes>
+                </filter>
+              </filters>
               <transformers>
                 <transformer>
                   <mainClass>${exec.mainClass}</mainClass>
                 </transformer>
                 <transformer />
+                <transformer />
+                <transformer>
+                  <addHeader>false</addHeader>
+                </transformer>
+                <transformer>
+                  <resource>META-INF/io.netty.versions.properties</resource>
+                </transformer>
               </transformers>
             </configuration>
           </execution>
@@ -193,11 +194,9 @@
   </dependencies>
   <properties>
     <micronaut.version>5.2.2</micronaut.version>
-    <exec.mainClass>messageserver.MessageServer</exec.mainClass>
-    <maven.compiler.target>26</maven.compiler.target>
-    <maven.compiler.source>26</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <release.version>26</release.version>
+    <exec.mainClass>messageserver.MessageServer</exec.mainClass>
     <jdk.version>26</jdk.version>
   </properties>
 </project>
-
